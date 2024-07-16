@@ -1,7 +1,7 @@
 const { StatusCodes } = require("http-status-codes");
-const CustomApiError = require("../errors");
+const CustomApiError = require("../errors/custom-error");
 
-const ErrorHandlerMiddleware = (req, res, err) => {
+const errorHandlerMiddleware = (err, req, res, next) => {
   if (err instanceof CustomApiError) {
     return res.status(err.statusCode).json({ message: err.message });
   }
@@ -11,4 +11,4 @@ const ErrorHandlerMiddleware = (req, res, err) => {
     .json({ message: "Nešto je pošlo po krivu" });
 };
 
-module.exports = ErrorHandlerMiddleware;
+module.exports = errorHandlerMiddleware;
