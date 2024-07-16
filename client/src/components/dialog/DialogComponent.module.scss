@@ -1,0 +1,29 @@
+@import "../../styles/main.scss";
+
+.dialog {
+  position: fixed;
+  inset: 0;
+  background-color: rgba($black, 0.5);
+  z-index: 9999;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.31s ease-in-out;
+
+  &__container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.dialog_open {
+  opacity: 1;
+  visibility: visible;
+}
