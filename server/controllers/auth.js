@@ -38,7 +38,16 @@ const login = async (req, res) => {
   res.status(StatusCodes.OK).json({ user });
 };
 
-const logout = async (req, res) => {};
+const logout = async (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      throw new UnauthenticatedError("Nešto je pošlo po krivu");
+    }
+
+    res.set("Set-Cookie", `session=; expires=Thu, 01 Jan 1970 00:00:00 GMT`);
+    res.status(StatusCodes.OK).json({ message: "Korisnik uspješno odjavljen" });
+  });
+};
 
 module.exports = {
   register,
