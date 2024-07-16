@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
 
 const UserSchema = new mongoose.Schema(
   {
@@ -28,6 +29,11 @@ const UserSchema = new mongoose.Schema(
     versionKey: false,
   }
 );
+
+UserSchema.pre("save", async function (next) {
+  let salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
+});
 
 const UserModel =
   mongoose.models.User || mongoose.model("User", UserSchema, "user");
