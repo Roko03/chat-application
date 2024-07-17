@@ -4,8 +4,9 @@ import { registerSchema } from "../../../../types/schema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ButtonComponent from "../../../../components/button/ButtonComponent";
+import registerUser from "../../../../lib/authentication/registerUser";
 
-type TRegisterSchema = z.infer<typeof registerSchema>;
+export type TRegisterSchema = z.infer<typeof registerSchema>;
 
 const RegisterFormComponent = () => {
   const {
@@ -16,7 +17,14 @@ const RegisterFormComponent = () => {
   } = useForm<TRegisterSchema>({ resolver: zodResolver(registerSchema) });
 
   const onSubmit = async (data: TRegisterSchema) => {
-    console.log(data);
+    const { username, email, password } = data;
+
+    const response = await registerUser({ username, email, password });
+    console.log(response);
+
+    if (!response.success) {
+      return;
+    }
 
     reset();
   };
