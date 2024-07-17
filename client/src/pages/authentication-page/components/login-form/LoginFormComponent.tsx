@@ -4,8 +4,9 @@ import { loginSchema } from "../../../../types/schema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ButtonComponent from "../../../../components/button/ButtonComponent";
+import loginUser from "../../../../lib/authentication/loginUser";
 
-type TLoginSchema = z.infer<typeof loginSchema>;
+export type TLoginSchema = z.infer<typeof loginSchema>;
 
 interface LoginFormComponentProps {
   openModal: () => void;
@@ -24,8 +25,13 @@ const LoginFormComponent: React.FC<LoginFormComponentProps> = ({
   });
 
   const onSubmit = async (data: TLoginSchema) => {
-    console.log(data);
+    const response = await loginUser(data);
 
+    if (!response.success) {
+      return;
+    }
+
+    console.log(response);
     reset();
   };
 
