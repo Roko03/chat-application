@@ -12,9 +12,17 @@ const RegisterFormComponent = () => {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<TRegisterSchema>({ resolver: zodResolver(registerSchema) });
+
+  const onSubmit = async (data: TRegisterSchema) => {
+    console.log(data);
+
+    reset();
+  };
+
   return (
-    <form className={styles.register_form}>
+    <form onSubmit={handleSubmit(onSubmit)} className={styles.register_form}>
       <h2>Registracija</h2>
       <label>
         <input
@@ -60,7 +68,7 @@ const RegisterFormComponent = () => {
           <p className="form_error">{`${errors.repeatPassword.message}`}</p>
         )}
       </label>
-      <ButtonComponent variant={"main"} onClick={() => {}}>
+      <ButtonComponent variant={"main"} onClick={handleSubmit(onSubmit)}>
         <p>Registriraj se</p>
       </ButtonComponent>
     </form>
