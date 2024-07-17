@@ -3,6 +3,7 @@ import { z } from "zod";
 import { registerSchema } from "../../../../types/schema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import ButtonComponent from "../../../../components/button/ButtonComponent";
 
 type TRegisterSchema = z.infer<typeof registerSchema>;
 
@@ -59,6 +60,9 @@ const RegisterFormComponent = () => {
           <p className="form_error">{`${errors.repeatPassword.message}`}</p>
         )}
       </label>
+      <ButtonComponent variant={"main"} onClick={() => {}}>
+        <p>Registriraj se</p>
+      </ButtonComponent>
     </form>
   );
 };
