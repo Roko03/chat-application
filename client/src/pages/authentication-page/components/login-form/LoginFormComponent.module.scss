@@ -1,0 +1,15 @@
+@import "../../../../styles/main.scss";
+
+.login_form {
+  display: flex;
+  flex-direction: column;
+  gap: rem(14);
+
+  &__text {
+    padding: rem(12) 0;
+
+    span {
+      color: $blue;
+    }
+  }
+}

@@ -37,7 +37,7 @@ const RegisterFormComponent = () => {
       </label>
       <label>
         <input
-          type="text"
+          type="email"
           placeholder="Unesite email"
           autoComplete="email"
           {...register("email")}
