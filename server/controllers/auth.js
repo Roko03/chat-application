@@ -35,7 +35,9 @@ const login = async (req, res) => {
 
   req.session.userId = user._id;
   res.set("Set-Cookie", `session=${req.session.id}`);
-  res.status(StatusCodes.OK).json({ user });
+  res
+    .status(StatusCodes.OK)
+    .json({ message: "Uspješno prijavljen", sessionId: req.session.id });
 };
 
 const logout = async (req, res) => {

@@ -6,6 +6,7 @@ const app = express();
 const connectDB = require("./utils/connectDB");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
+const cors = require("cors");
 
 const notFoundMiddleware = require("./middleware/not-found");
 const errorHandlerMiddleware = require("./middleware/error-handler");
@@ -13,6 +14,12 @@ const errorHandlerMiddleware = require("./middleware/error-handler");
 const authRouter = require("./router/auth");
 
 app.use(express.json());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 
 const sessionStore = MongoStore.create({
   mongoUrl: process.env.MONGO_URI,
