@@ -38,12 +38,16 @@ const login = async (req, res) => {
 };
 
 const logout = async (req, res) => {
+  if (!req.session.userId) {
+    throw new NotFoundError("Korisnik ne postoji");
+  }
+
   req.session.destroy((err) => {
     if (err) {
       throw new UnauthenticatedError("Nešto je pošlo po krivu");
     }
 
-    res.set("Set-Cookie", `session=; expires=Thu, 01 Jan 1970 00:00:00 GMT`);
+    res.clearCookie("sessionId");
     res.status(StatusCodes.OK).json({ message: "Korisnik uspješno odjavljen" });
   });
 };
