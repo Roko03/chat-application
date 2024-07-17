@@ -6,7 +6,6 @@ import LoginFormComponent from "./components/login-form/LoginFormComponent";
 
 const AuthenticationPageSection = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-
   return (
     <section className={styles.authentication_section}>
       <h2>Welcome to Chat application</h2>

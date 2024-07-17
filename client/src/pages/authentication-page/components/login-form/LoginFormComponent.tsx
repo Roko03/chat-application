@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ButtonComponent from "../../../../components/button/ButtonComponent";
 import loginUser from "../../../../lib/authentication/loginUser";
+import { useAuth } from "../../../../util/useAuthContext";
 
 export type TLoginSchema = z.infer<typeof loginSchema>;
 
@@ -24,6 +25,8 @@ const LoginFormComponent: React.FC<LoginFormComponentProps> = ({
     resolver: zodResolver(loginSchema),
   });
 
+  const auth = useAuth();
+
   const onSubmit = async (data: TLoginSchema) => {
     const response = await loginUser(data);
 
@@ -31,7 +34,9 @@ const LoginFormComponent: React.FC<LoginFormComponentProps> = ({
       return;
     }
 
-    console.log(response);
+    if (auth) {
+      auth.setIsAuth(true);
+    }
     reset();
   };
 
