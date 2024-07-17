@@ -52,8 +52,23 @@ const logout = async (req, res) => {
   });
 };
 
+const getUser = async (req, res) => {
+  const userId = req.session.userId;
+
+  const user = await User.findOne({ _id: userId }).select(
+    "_id username email password"
+  );
+
+  if (!user) {
+    throw new NotFoundError("Korisnik ne postoji");
+  }
+
+  res.status(StatusCodes.OK).json({ user });
+};
+
 module.exports = {
   register,
   login,
   logout,
+  getUser,
 };
