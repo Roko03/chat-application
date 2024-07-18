@@ -17,7 +17,7 @@ const AuthenticationPageSection = () => {
         isOpen={isModalOpen}
         closeDialog={() => setIsModalOpen(false)}
       >
-        <RegisterFormComponent />
+        <RegisterFormComponent closeModal={() => setIsModalOpen(false)} />
       </ModalComponent>
     </section>
   );

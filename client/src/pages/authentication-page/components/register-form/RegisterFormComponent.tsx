@@ -5,10 +5,17 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ButtonComponent from "../../../../components/button/ButtonComponent";
 import registerUser from "../../../../lib/authentication/registerUser";
+import { useAuth } from "../../../../util/useAuthContext";
 
 export type TRegisterSchema = z.infer<typeof registerSchema>;
 
-const RegisterFormComponent = () => {
+interface RegisterFormComponentProps {
+  closeModal: () => void;
+}
+
+const RegisterFormComponent: React.FC<RegisterFormComponentProps> = ({
+  closeModal,
+}) => {
   const {
     register,
     handleSubmit,
@@ -16,16 +23,21 @@ const RegisterFormComponent = () => {
     reset,
   } = useForm<TRegisterSchema>({ resolver: zodResolver(registerSchema) });
 
+  const auth = useAuth();
+
   const onSubmit = async (data: TRegisterSchema) => {
     const { username, email, password } = data;
 
     const response = await registerUser({ username, email, password });
 
     if (!response.success) {
+      auth?.openSnackBarComponent("error", response.message);
       return;
     }
 
     reset();
+    closeModal();
+    auth?.openSnackBarComponent("success", response.message);
   };
 
   return (
