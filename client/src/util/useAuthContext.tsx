@@ -22,24 +22,25 @@ export const AuthManagerProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [isAuth, setIsAuth] = useState<boolean>(false);
   const [user, setUser] = useState<User | null>(null);
+  const [isAuth, setIsAuth] = useState<boolean>(!user);
 
   const fetchUser = async () => {
     const response = await getUser();
 
     if (!response.success) {
+      setIsAuth(false);
+      setUser(null);
       return;
     }
 
     setUser(response.user);
+    setIsAuth(true);
   };
 
   useEffect(() => {
-    if (isAuth) {
-      fetchUser();
-    }
-  }, [isAuth]);
+    fetchUser();
+  }, []);
 
   return (
     <AuthContext.Provider value={{ isAuth, user, setIsAuth }}>
