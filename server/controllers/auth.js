@@ -57,7 +57,9 @@ const getUser = async (req, res) => {
   const { sessionId } = req.cookies;
 
   if (!sessionId) {
-    return res.status(StatusCodes.OK).json({ message: "Sesija ne postoji" });
+    return res
+      .status(StatusCodes.UNAUTHORIZED)
+      .json({ message: "Sesija ne postoji" });
   }
 
   const user = await User.findOne({ _id: userId }).select(
