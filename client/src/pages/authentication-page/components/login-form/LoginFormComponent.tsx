@@ -33,6 +33,7 @@ const LoginFormComponent: React.FC<LoginFormComponentProps> = ({
     const response = await loginUser(data);
 
     if (!response.success) {
+      auth?.openSnackBarComponent("error", response.message);
       return;
     }
 
