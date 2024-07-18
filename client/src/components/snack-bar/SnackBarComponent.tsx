@@ -16,8 +16,8 @@ const SnackBarComponent: React.FC<SnackBarComponentProps> = ({
   const snackBarClass = (variant: "error" | "success" | null): string => {
     if (variant != null) {
       const snackBarStyle: { [key in "error" | "success"]: string } = {
-        error: styles.error_snackbar,
-        success: styles.success_snackbar,
+        error: styles.snack_bar_error,
+        success: styles.snack_bar_success,
       };
 
       return snackBarStyle[variant];
