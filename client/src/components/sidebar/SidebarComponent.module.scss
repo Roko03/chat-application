@@ -1,8 +1,15 @@
 @import "../../styles/main.scss";
 
 .sidebar {
+  display: none;
+  @include breakpoint(medium) {
+    display: block;
+  }
   background-color: $blue;
-  width: rem(420);
+  width: rem(320);
+  @include breakpoint(large) {
+    width: rem(360);
+  }
   height: calc(100vh - rem(100));
 
   &__container {
