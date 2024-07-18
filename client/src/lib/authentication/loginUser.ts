@@ -10,8 +10,10 @@ export default async function loginUser(data: TLoginSchema) {
         body: JSON.stringify(data)
     })
 
-    if (!response.ok) return { success: false, message: "Neuspjela prijava" }
+    const json = await response.json()
 
-    return { success: true, message: "Prijava uspješna" }
+    if (!response.ok) return { success: false, ...json }
+
+    return { success: true, ...json }
 
 }

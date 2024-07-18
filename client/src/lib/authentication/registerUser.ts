@@ -6,10 +6,10 @@ export default async function registerUser(data: User) {
         },
         body: JSON.stringify(data)
     })
-
-    if (!response.ok) return { success: false, message: "Greška prilikom registracije" }
-
     const json = await response.json()
 
-    return { success: true, json }
+    if (!response.ok) return { success: false, ...json }
+
+
+    return { success: true, ...json }
 }

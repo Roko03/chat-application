@@ -4,10 +4,11 @@ export default async function getUser() {
         credentials: 'include'
     })
 
+    const json = await response.json()
+
     if (!response.ok) {
-        return { success: false }
+        return { success: false, ...json }
     }
 
-    const json = await response.json()
     return { success: true, ...json }
 }
