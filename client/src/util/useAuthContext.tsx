@@ -1,10 +1,12 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import getUser from "../lib/authentication/getUser";
+import refreshSession from "../lib/authentication/refreshSession";
 
 const AuthContext = createContext<{
   isAuth: boolean;
   user: User | null;
   setIsAuth: React.Dispatch<React.SetStateAction<boolean>>;
+  updateSession: () => void;
 } | null>(null);
 
 export const useAuth = () => {
@@ -38,12 +40,25 @@ export const AuthManagerProvider = ({
     setIsAuth(true);
   };
 
+  const updateSession = async () => {
+    const response = await refreshSession();
+
+    if (!response.success) {
+      setIsAuth(false);
+      setUser(null);
+      return;
+    }
+
+    setIsAuth(true);
+    await fetchUser();
+  };
+
   useEffect(() => {
     fetchUser();
   }, []);
 
   return (
-    <AuthContext.Provider value={{ isAuth, user, setIsAuth }}>
+    <AuthContext.Provider value={{ isAuth, user, setIsAuth, updateSession }}>
       {children}
     </AuthContext.Provider>
   );
