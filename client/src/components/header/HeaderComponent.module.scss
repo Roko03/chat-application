@@ -1,0 +1,27 @@
+@import "../../styles/main.scss";
+
+.header {
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: $white;
+  box-shadow: $box-shadow;
+
+  &__container {
+    margin: rem(24) auto;
+    width: 90%;
+    max-width: rem(1440);
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__logo {
+    font-family: $poppins;
+    font-size: rem(24);
+    font-weight: 700;
+  }
+}
