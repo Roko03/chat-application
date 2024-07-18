@@ -7,9 +7,11 @@
   left: 0;
   background-color: $white;
   box-shadow: $box-shadow;
+  height: rem(100);
 
   &__container {
-    margin: rem(24) auto;
+    height: 100%;
+    margin: auto;
     width: 90%;
     max-width: rem(1440);
 
