@@ -7,11 +7,11 @@ const User = require("../models/User");
 const { StatusCodes } = require("http-status-codes");
 
 const register = async (req, res) => {
-  const user = await User.create({ ...req.body });
+  await User.create({ ...req.body });
 
   res
     .status(StatusCodes.CREATED)
-    .json({ message: "Korisnik uspješno kreiran", user });
+    .json({ message: "Korisnik uspješno kreiran" });
 };
 
 const login = async (req, res) => {
@@ -34,7 +34,7 @@ const login = async (req, res) => {
   }
 
   req.session.userId = user._id;
-  res.status(StatusCodes.OK).send(req.session.userId);
+  res.status(StatusCodes.OK).send({ message: "Uspješna prijava", user });
 };
 
 const logout = async (req, res) => {
@@ -74,7 +74,7 @@ const getUser = async (req, res) => {
 const refreshSession = async (req, res) => {
   const { sessionId } = req.cookies;
 
-  if (!sessionId) {
+  if (!sessionId || !req.session.userId) {
     throw new NotFoundError("Sesija ne postoji");
   }
 
