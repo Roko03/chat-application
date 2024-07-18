@@ -54,6 +54,11 @@ const logout = async (req, res) => {
 
 const getUser = async (req, res) => {
   const userId = req.session.userId;
+  const { sessionId } = req.cookies;
+
+  if (!sessionId) {
+    return res.status(StatusCodes.OK);
+  }
 
   const user = await User.findOne({ _id: userId }).select(
     "_id username email password"
