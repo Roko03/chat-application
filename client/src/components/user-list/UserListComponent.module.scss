@@ -1,0 +1,13 @@
+@import "../../styles/main.scss";
+
+.user_list {
+  display: flex;
+  flex-direction: column;
+}
+
+.primary_user_list {
+}
+
+.secondary_user_list {
+  gap: rem(24);
+}

@@ -5,3 +5,10 @@ type User = {
     email: string;
     password: string;
 }
+
+type UserDB = {
+    _id: string;
+    username: string;
+    email: string;
+    password: string;
+}

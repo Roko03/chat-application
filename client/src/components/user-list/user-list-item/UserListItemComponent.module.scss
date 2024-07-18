@@ -1,0 +1,21 @@
+@import "../../../styles/main.scss";
+
+.primary_user_list_item {
+}
+
+.secondary_user_list_item {
+  background-color: $white;
+  padding: rem(18) rem(24);
+  border-radius: rem(8);
+  font-family: $poppins;
+  cursor: pointer;
+  color: $black;
+  font-weight: 500;
+
+  transition: all 0.2s ease-in-out;
+}
+
+.secondary_user_list_item:hover {
+  background-color: $blue;
+  color: $white;
+}

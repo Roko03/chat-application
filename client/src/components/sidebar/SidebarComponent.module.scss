@@ -13,9 +13,20 @@
   }
 
   &__list {
-    padding-left: rem(24);
+    overflow-y: scroll;
+    padding: 0 rem(24);
     @include breakpoint(large) {
-      padding-left: rem(32);
+      padding: 0 rem(32);
+    }
+    margin-bottom: rem(24);
+    border-right: rem(6) solid $blue;
+
+    &::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: $white;
     }
   }
 
