@@ -20,7 +20,6 @@ const RegisterFormComponent = () => {
     const { username, email, password } = data;
 
     const response = await registerUser({ username, email, password });
-    console.log(response);
 
     if (!response.success) {
       return;

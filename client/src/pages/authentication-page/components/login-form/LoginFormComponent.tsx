@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import ButtonComponent from "../../../../components/button/ButtonComponent";
 import loginUser from "../../../../lib/authentication/loginUser";
 import { useAuth } from "../../../../util/useAuthContext";
+import { useNavigate } from "react-router-dom";
 
 export type TLoginSchema = z.infer<typeof loginSchema>;
 
@@ -26,6 +27,7 @@ const LoginFormComponent: React.FC<LoginFormComponentProps> = ({
   });
 
   const auth = useAuth();
+  const navigate = useNavigate();
 
   const onSubmit = async (data: TLoginSchema) => {
     const response = await loginUser(data);
@@ -36,7 +38,9 @@ const LoginFormComponent: React.FC<LoginFormComponentProps> = ({
 
     if (auth) {
       auth.setIsAuth(true);
+      auth.setUser(response.user);
     }
+    navigate("/");
     reset();
   };
 

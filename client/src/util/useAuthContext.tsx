@@ -6,6 +6,7 @@ const AuthContext = createContext<{
   isAuth: boolean;
   user: User | null;
   setIsAuth: React.Dispatch<React.SetStateAction<boolean>>;
+  setUser: React.Dispatch<React.SetStateAction<User | null>>;
   updateSession: () => void;
 } | null>(null);
 
@@ -58,7 +59,9 @@ export const AuthManagerProvider = ({
   }, []);
 
   return (
-    <AuthContext.Provider value={{ isAuth, user, setIsAuth, updateSession }}>
+    <AuthContext.Provider
+      value={{ isAuth, user, setIsAuth, setUser, updateSession }}
+    >
       {children}
     </AuthContext.Provider>
   );
