@@ -1,0 +1,8 @@
+@import "../../styles/main.scss";
+
+.sidebar {
+  padding-left: rem(24);
+  @include breakpoint(large) {
+    padding-left: rem(32);
+  }
+}
