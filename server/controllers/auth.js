@@ -78,7 +78,7 @@ const refreshSession = async (req, res) => {
     throw new NotFoundError("Sesija ne postoji");
   }
 
-  req.session.regenerate((err) => {
+  return req.session.regenerate((err) => {
     if (err) {
       throw new UnauthenticatedError("Nešto je pošlo po krivu");
     }
