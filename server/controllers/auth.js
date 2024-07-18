@@ -57,7 +57,7 @@ const getUser = async (req, res) => {
   const { sessionId } = req.cookies;
 
   if (!sessionId) {
-    return res.status(StatusCodes.OK);
+    return res.status(StatusCodes.OK).json({ message: "Sesija ne postoji" });
   }
 
   const user = await User.findOne({ _id: userId }).select(
@@ -71,9 +71,26 @@ const getUser = async (req, res) => {
   res.status(StatusCodes.OK).json({ user });
 };
 
+const refreshSession = async (req, res) => {
+  const { sessionId } = req.cookies;
+
+  if (!sessionId) {
+    throw new NotFoundError("Sesija ne postoji");
+  }
+
+  req.session.regenerate((err) => {
+    if (err) {
+      throw new UnauthenticatedError("Nešto je pošlo po krivu");
+    }
+
+    res.status(StatusCodes.OK).send(req.session.userId);
+  });
+};
+
 module.exports = {
   register,
   login,
   logout,
   getUser,
+  refreshSession,
 };

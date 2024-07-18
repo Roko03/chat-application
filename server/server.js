@@ -30,7 +30,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const sessionStore = MongoStore.create({
   mongoUrl: process.env.MONGO_URI,
   collectionName: "sessions",
-  ttl: 24 * 60 * 60,
+  ttl: 80,
 });
 
 app.use(
@@ -43,7 +43,7 @@ app.use(
     cookie: {
       sameSite: false,
       httpOnly: true,
-      maxAge: 3600000,
+      maxAge: 30 * 1000,
       secure: false,
     },
   })
