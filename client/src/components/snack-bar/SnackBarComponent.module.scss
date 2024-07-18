@@ -1,0 +1,29 @@
+@import "../../styles/main.scss";
+
+.snack_bar {
+  position: fixed;
+  z-index: 99999;
+  left: rem(24);
+  bottom: rem(24);
+
+  padding: rem(18) rem(24);
+  color: $white;
+  border-radius: rem(6);
+
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.31s ease-in-out;
+}
+
+.snack_bar_visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.snack_bar_success {
+  background-color: $green;
+}
+
+.snack_bar_error {
+  background-color: $red;
+}

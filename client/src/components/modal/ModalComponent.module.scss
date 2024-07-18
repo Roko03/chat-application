@@ -1,0 +1,21 @@
+@import "../../styles/main.scss";
+
+.modal {
+  background-color: $white;
+  border-radius: rem(10);
+  overflow: auto;
+}
+
+.big_modal {
+  padding: rem(24);
+  width: 80vw;
+  max-width: rem(620);
+  height: 80vh;
+}
+
+.small_modal {
+  width: 60vw;
+  max-width: rem(360);
+  max-height: rem(320);
+  height: 50vh;
+}

@@ -1,0 +1,28 @@
+@import "../../styles/main.scss";
+
+.button {
+  border: none;
+  outline: none;
+  cursor: pointer;
+  border-radius: rem(8);
+  font-family: $poppins;
+  font-size: rem(21);
+}
+
+.button_main {
+  background-color: $blue;
+  color: $white;
+  align-self: center;
+  padding: rem(18) rem(24);
+
+  @include breakpoint(medium) {
+    padding: rem(14) rem(48);
+  }
+}
+
+.button_secondary {
+  background-color: $red;
+  color: $white;
+  align-self: baseline;
+  padding: rem(14) rem(32);
+}

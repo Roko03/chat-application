@@ -1,38 +1,67 @@
 require("dotenv").config();
 require("express-async-errors");
 
+//security packages
+
+const helmet = require("helmet");
+const xss = require("xss-clean");
+const rateLimiter = require("express-rate-limit");
+const cors = require("cors");
+
 const express = require("express");
 const app = express();
 const connectDB = require("./utils/connectDB");
-const session = require("express-session");
 const MongoStore = require("connect-mongo");
+
+const session = require("express-session");
+const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
 
 const notFoundMiddleware = require("./middleware/not-found");
 const errorHandlerMiddleware = require("./middleware/error-handler");
 
 const authRouter = require("./router/auth");
 
+//middleware
+app.set("trust proxy", 1);
+app.use(
+  rateLimiter({
+    windowMs: 15 * 60 * 1000, //15 minutes,
+    max: 100, //limit each IP to 100 request per windowMs
+  })
+);
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD"],
+    credentials: true,
+  })
+);
 app.use(express.json());
+app.use(cookieParser());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(helmet());
+app.use(xss());
 
 const sessionStore = MongoStore.create({
   mongoUrl: process.env.MONGO_URI,
   collectionName: "sessions",
-  ttl: 24 * 60 * 60,
+  ttl: 2 * 24 * 60 * 60,
 });
 
 app.use(
   session({
-    secret: "secret-key",
+    name: process.env.SECRET_SESSION_NAME,
+    secret: process.env.SECRET_SESSION_KEY,
     resave: false,
     saveUninitialized: false,
     store: sessionStore,
     cookie: {
+      sameSite: false,
       httpOnly: true,
-      maxAge: 3600000,
-      secure: true,
+      maxAge: 1000 * 60 * 60 * 24,
+      secure: false,
     },
-    maxAge: 24 * 60 * 60 * 1000,
-    rolling: true,
   })
 );
 

@@ -1,0 +1,34 @@
+@import "../../styles/main.scss";
+
+.authentication_section {
+  margin-top: rem(42);
+  @include breakpoint(medium) {
+    margin-top: rem(48);
+  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  h2 {
+    font-size: rem(32);
+    font-weight: 500;
+    text-align: center;
+    font-family: $poppins;
+  }
+
+  &__login {
+    margin: auto;
+    padding: rem(32) 0;
+
+    @include breakpoint(medium) {
+      padding: rem(48) 0;
+    }
+    width: 100%;
+    max-width: rem(480);
+
+    button {
+      align-self: baseline;
+    }
+  }
+}

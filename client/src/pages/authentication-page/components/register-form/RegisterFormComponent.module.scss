@@ -1,0 +1,17 @@
+@import "../../../../styles/main.scss";
+
+.register_form {
+  display: flex;
+  flex-direction: column;
+  gap: rem(18);
+  height: 100%;
+
+  h2 {
+    padding: rem(18) 0;
+  }
+
+  button {
+    margin-top: auto;
+    margin-bottom: rem(24);
+  }
+}
