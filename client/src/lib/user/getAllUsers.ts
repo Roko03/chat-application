@@ -4,5 +4,9 @@ export default async function getAllUsers() {
         credentials: 'include'
     })
 
-    return await response.json()
+    const json = await response.json()
+
+    if (!response.ok) return { success: false, ...json }
+
+    return { success: true, user: json }
 }

@@ -13,7 +13,10 @@ const HomePageSection = () => {
   const fetchUser = async () => {
     const response = await getAllUsers();
 
-    setUserList(response);
+    if (!response.success) {
+      return;
+    }
+    setUserList(response.user);
   };
 
   useEffect(() => {
