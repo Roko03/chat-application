@@ -1,0 +1,44 @@
+@import "../../../styles/main.scss";
+
+.chat_message {
+  padding: 20px 25px;
+  word-wrap: break-word;
+  border-radius: rem(12);
+  width: fit-content;
+  max-width: rem(220);
+  @include breakpoint(medium) {
+    max-width: rem(360);
+  }
+
+  display: flex;
+  align-items: center;
+  gap: rem(6);
+  flex-wrap: wrap;
+
+  &__user {
+    font-family: $poppins;
+    font-size: rem(14);
+    font-weight: 600;
+  }
+
+  &__message {
+    font-size: rem(14);
+    font-weight: 400;
+
+    p {
+      line-height: 1.3;
+    }
+  }
+}
+
+.sender_message {
+  background-color: $blue;
+  color: $white;
+  align-self: flex-end;
+}
+
+.recipient_message {
+  align-self: flex-start;
+  background-color: #fff;
+  border: 1px solid rgba($black, 0.1);
+}
