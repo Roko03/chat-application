@@ -1,11 +1,11 @@
+import ContainerLayout from "../container/ContainerLayout";
 import HeaderComponent from "../header/HeaderComponent";
-import { Outlet } from "react-router-dom";
 
 const Layout = () => {
   return (
     <>
       <HeaderComponent />
-      <Outlet />
+      <ContainerLayout />
     </>
   );
 };
