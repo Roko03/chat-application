@@ -1,0 +1,10 @@
+@import "../../styles/main.scss";
+
+.container {
+  padding: 0 rem(24);
+  @include breakpoint(large) {
+    padding: 0 rem(32);
+  }
+  margin: 0 auto;
+  max-width: rem(1440);
+}

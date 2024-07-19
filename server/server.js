@@ -19,8 +19,10 @@ const cookieParser = require("cookie-parser");
 
 const notFoundMiddleware = require("./middleware/not-found");
 const errorHandlerMiddleware = require("./middleware/error-handler");
+const authMiddleware = require("./middleware/authentication");
 
 const authRouter = require("./router/auth");
+const userRouter = require("./router/user");
 
 //middleware
 app.set("trust proxy", 1);
@@ -66,6 +68,7 @@ app.use(
 );
 
 app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/user", authMiddleware, userRouter);
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);

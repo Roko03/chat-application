@@ -1,0 +1,10 @@
+@import "../../../../styles/main.scss";
+
+.home_user_list {
+  padding-top: rem(38);
+  display: block;
+
+  @include breakpoint(medium) {
+    display: none;
+  }
+}

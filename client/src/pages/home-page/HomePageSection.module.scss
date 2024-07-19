@@ -1,0 +1,14 @@
+@import "../../styles/main.scss";
+
+.home_section {
+  margin-top: rem(100);
+
+  &__container {
+    display: flex;
+    flex-direction: column;
+    @include breakpoint(medium) {
+      flex-direction: row;
+    }
+    width: 100%;
+  }
+}
