@@ -1,0 +1,9 @@
+@import "../../../../styles/main.scss";
+
+.home_user_list {
+  display: block;
+
+  @include breakpoint(medium) {
+    display: none;
+  }
+}

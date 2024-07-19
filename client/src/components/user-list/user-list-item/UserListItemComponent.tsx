@@ -18,7 +18,11 @@ const UserListItemComponent: React.FC<UserListItemComponentProps> = ({
     return listItemStyle[type];
   };
 
-  return <div className={`${listItemVariant(type)}`}>{user.username}</div>;
+  return (
+    <div className={`${styles.user_list_item} ${listItemVariant(type)}`}>
+      {user.username}
+    </div>
+  );
 };
 
 export default UserListItemComponent;

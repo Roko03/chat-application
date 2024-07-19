@@ -1,6 +1,7 @@
 import { useState } from "react";
 import SidebarComponent from "../../components/sidebar/SidebarComponent";
 import styles from "./HomePageSection.module.scss";
+import HomePageUserListComponent from "./components/home-page-user-list/HomePageUserListComponent";
 
 const HomePageSection = () => {
   const [userList, setUserList] = useState<UserDB[] | null>([
@@ -21,6 +22,7 @@ const HomePageSection = () => {
   return (
     <section className={styles.home_section}>
       <SidebarComponent userList={userList} />
+      <HomePageUserListComponent userList={userList} />
     </section>
   );
 };
