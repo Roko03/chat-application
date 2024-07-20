@@ -7,7 +7,7 @@ import ChatComponent from "../../components/chat/ChatComponent";
 import getAllUsers from "../../lib/user/getAllUsers";
 
 const HomePageSection = () => {
-  const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
+  const [isChatOpen, setIsChatOpen] = useState<boolean>(true);
   const [userList, setUserList] = useState<UserDB[] | null>(null);
 
   const fetchUser = async () => {
