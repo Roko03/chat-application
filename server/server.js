@@ -8,10 +8,21 @@ const xss = require("xss-clean");
 const rateLimiter = require("express-rate-limit");
 const cors = require("cors");
 
+const { createServer } = require("node:http");
+const { Server } = require("socket.io");
+
 const express = require("express");
 const app = express();
 const connectDB = require("./utils/connectDB");
 const MongoStore = require("connect-mongo");
+const server_app = createServer(app);
+const io = new Server(server_app, {
+  cors: {
+    origin: "http://localhost:5173",
+    methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD"],
+    credentials: true,
+  },
+});
 
 const session = require("express-session");
 const bodyParser = require("body-parser");
@@ -70,6 +81,18 @@ app.use(
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/user", authMiddleware, userRouter);
 
+io.on("connection", (socket) => {
+  console.log("a user connected");
+
+  socket.on("message", (data) => {
+    console.log(data);
+  });
+
+  socket.on("disconnect", () => {
+    io.emit("message", "A user has left the chat");
+  });
+});
+
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
 
@@ -78,7 +101,7 @@ const port = process.env.PORT || 3000;
 const server = async () => {
   try {
     await connectDB();
-    app.listen(port, console.log("Server is running..."));
+    server_app.listen(port, console.log("Server is running..."));
   } catch (error) {
     console.log(error);
   }
