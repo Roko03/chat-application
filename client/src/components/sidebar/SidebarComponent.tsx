@@ -4,9 +4,13 @@ import styles from "./SidebarComponent.module.scss";
 
 interface SidebarComponentProps {
   userList: UserDB[] | null;
+  openChat: (id: string) => void;
 }
 
-const SidebarComponent: React.FC<SidebarComponentProps> = ({ userList }) => {
+const SidebarComponent: React.FC<SidebarComponentProps> = ({
+  userList,
+  openChat,
+}) => {
   const auth = useAuth();
 
   return (
@@ -16,7 +20,11 @@ const SidebarComponent: React.FC<SidebarComponentProps> = ({ userList }) => {
           {userList === null || userList.length <= 0 ? (
             <p>Nema korisnika</p>
           ) : (
-            <UserListComponent type={"secondary"} userList={userList} />
+            <UserListComponent
+              type={"secondary"}
+              userList={userList}
+              openChat={(id: string) => openChat(id)}
+            />
           )}
         </div>
         {auth && (
