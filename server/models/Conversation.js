@@ -11,7 +11,6 @@ const ConversationSchema = new mongoose.Schema(
     chat_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "ConservationMessage",
-      require: true,
     },
   },
   { versionKey: false }
