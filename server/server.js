@@ -35,6 +35,7 @@ const authMiddleware = require("./middleware/authentication");
 const authRouter = require("./router/auth");
 const userRouter = require("./router/user");
 const conversationRouter = require("./router/conversation");
+const messageRouter = require("./router/message");
 
 //middleware
 app.set("trust proxy", 1);
@@ -81,7 +82,12 @@ app.use(
 
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/user", authMiddleware, userRouter);
-app.use("/api/v1/conversation", authMiddleware, conversationRouter);
+app.use(
+  "/api/v1/conversation",
+  authMiddleware,
+  conversationRouter,
+  messageRouter
+);
 
 io.on("connection", (socket) => {
   console.log("a user connected");

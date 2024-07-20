@@ -1,4 +1,6 @@
 const Conversation = require("../models/Conversation");
+const mongoose = require("mongoose");
+const { StatusCodes } = require("http-status-codes");
 
 const getConversation = async (req, res) => {
   const {
@@ -6,11 +8,41 @@ const getConversation = async (req, res) => {
     params: { id: targetId },
   } = req;
 
-  const conversation = await Conversation.findOne({
-    participants: [userId, targetId],
-  });
+  const conversation = await Conversation.aggregate([
+    {
+      $match: {
+        participants: {
+          $all: [
+            new mongoose.Types.ObjectId(userId),
+            new mongoose.Types.ObjectId(targetId),
+          ],
+        },
+      },
+    },
+    {
+      $lookup: {
+        from: "conservation-message",
+        localField: "_id",
+        foreignField: "conversation_id",
+        as: "conservationMessage",
+      },
+    },
+    {
+      $lookup: {
+        from: "message",
+        localField: "conservationMessage.message_id",
+        foreignField: "_id",
+        as: "messages",
+      },
+    },
+    {
+      $project: {
+        conservationMessage: 0,
+      },
+    },
+  ]).exec();
 
-  res.status(201).json({ conversation });
+  res.status(StatusCodes.OK).json({ conversation });
 };
 
 const makeConversation = async (req, res) => {
