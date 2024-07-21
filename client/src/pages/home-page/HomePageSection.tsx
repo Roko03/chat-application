@@ -5,11 +5,13 @@ import HomePageUserListComponent from "./components/home-page-user-list/HomePage
 import HomePageChatComponent from "./components/home-page-chat/HomePageChatComponent";
 import ChatComponent from "../../components/chat/ChatComponent";
 import getAllUsers from "../../lib/user/getAllUsers";
+import getConversetion from "../../lib/conversation/getConversation";
 
 const HomePageSection = () => {
   const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
   const [userList, setUserList] = useState<UserDB[] | null>(null);
   const [targetUser, setTargetUser] = useState<string | null>(null);
+  const [conversation, setConversation] = useState<Conversation | null>(null);
 
   const fetchUser = async () => {
     const response = await getAllUsers();
@@ -18,6 +20,17 @@ const HomePageSection = () => {
       return;
     }
     setUserList(response.user);
+  };
+
+  const fetchChat = async () => {
+    if (!targetUser || !isChatOpen) {
+      setConversation(null);
+      return;
+    }
+
+    const response = await getConversetion(targetUser);
+
+    setConversation(response.conversation[0]);
   };
 
   const openChat = (id: string) => {
@@ -29,6 +42,10 @@ const HomePageSection = () => {
     setIsChatOpen(false);
     setTargetUser(null);
   };
+
+  useEffect(() => {
+    fetchChat();
+  }, [isChatOpen, targetUser]);
 
   useEffect(() => {
     fetchUser();
