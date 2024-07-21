@@ -24,13 +24,19 @@ const getConversation = async (req, res) => {
         from: "conservation-message",
         localField: "_id",
         foreignField: "conversation_id",
-        as: "conservationMessage",
+        as: "conservationMessages",
+      },
+    },
+    {
+      $unwind: {
+        path: "$conservationMessages",
+        preserveNullAndEmptyArrays: true,
       },
     },
     {
       $lookup: {
         from: "message",
-        localField: "conservationMessage.message_id",
+        localField: "conservationMessages.message_id",
         foreignField: "_id",
         as: "messages",
       },
@@ -38,6 +44,7 @@ const getConversation = async (req, res) => {
     {
       $unwind: {
         path: "$messages",
+        preserveNullAndEmptyArrays: true,
       },
     },
     {
@@ -45,15 +52,39 @@ const getConversation = async (req, res) => {
         from: "user",
         localField: "messages.receiver_id",
         foreignField: "_id",
-        as: "messages.recivier",
+        as: "receiverDetails",
       },
     },
     {
-      $project: {
-        conservationMessage: 0,
-        "messages.recivier.createdAt": 0,
-        "messages.recivier.updatedAt": 0,
-        "messages.recivier.password": 0,
+      $unwind: {
+        path: "$receiverDetails",
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $group: {
+        _id: "$_id",
+        participants: { $first: "$participants" },
+        messages: {
+          $push: {
+            _id: "$messages._id",
+            sender_id: "$messages.sender_id",
+            receiver_id: "$messages.receiver_id",
+            message: "$messages.message",
+            createdAt: "$messages.createdAt",
+            updatedAt: "$messages.updatedAt",
+            receiver: {
+              _id: "$receiverDetails._id",
+              username: "$receiverDetails.username",
+              email: "$receiverDetails.email",
+            },
+          },
+        },
+      },
+    },
+    {
+      $sort: {
+        "messages.createdAt": 1,
       },
     },
   ]).exec();
