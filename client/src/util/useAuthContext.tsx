@@ -11,9 +11,9 @@ type SnackBarType = {
 
 const AuthContext = createContext<{
   isAuth: boolean;
-  user: User | null;
+  user: UserDB | null;
   setIsAuth: React.Dispatch<React.SetStateAction<boolean>>;
-  setUser: React.Dispatch<React.SetStateAction<User | null>>;
+  setUser: React.Dispatch<React.SetStateAction<UserDB | null>>;
   openSnackBarComponent: (type: "error" | "success", message: string) => void;
   updateSession: () => void;
 } | null>(null);
@@ -33,7 +33,7 @@ export const AuthManagerProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<UserDB | null>(null);
   const [isAuth, setIsAuth] = useState<boolean>(!user);
   const [snackBar, setSnackBar] = useState<SnackBarType>({
     isOpen: false,

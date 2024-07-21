@@ -13,9 +13,9 @@ const HomePageChatComponent: React.FC<HomePageChatComponentProps> = ({
   closeChat,
   children,
 }) => {
-  const leaveChat = () => {
-    socket.emit("disconnect");
-  };
+  // const leaveChat = () => {
+  //   socket.emit("disconnect");
+  // };
   return (
     <div className={styles.home_chat_box}>
       <ButtonComponent variant={"secondary"} onClick={closeChat}>

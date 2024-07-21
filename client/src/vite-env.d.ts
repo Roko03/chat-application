@@ -6,6 +6,12 @@ type User = {
     password: string;
 }
 
+type UserWithoutPwd = {
+    _id: string;
+    username: String;
+    email: string;
+}
+
 type UserDB = {
     _id: string;
     username: string;
@@ -20,6 +26,8 @@ type Message = {
     message: string;
     createdAt: Date;
     updatedAt: Date;
+    recipient: UserWithoutPwd
+    sender: UserWithoutPwd
 }
 
 type Conversation = {
