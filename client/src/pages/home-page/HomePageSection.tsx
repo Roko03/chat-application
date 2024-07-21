@@ -60,7 +60,10 @@ const HomePageSection = () => {
         />
         {isChatOpen && conversation && (
           <HomePageChatComponent closeChat={() => closeChat()}>
-            <ChatComponent messages={conversation.messages} />
+            <ChatComponent
+              messages={conversation.messages}
+              targetUser={targetUser}
+            />
           </HomePageChatComponent>
         )}
       </div>
