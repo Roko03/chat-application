@@ -62,6 +62,20 @@ const getConversation = async (req, res) => {
       },
     },
     {
+      $lookup: {
+        from: "user",
+        localField: "messages.sender_id",
+        foreignField: "_id",
+        as: "senderDetails",
+      },
+    },
+    {
+      $unwind: {
+        path: "$senderDetails",
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
       $group: {
         _id: "$_id",
         participants: { $first: "$participants" },
@@ -73,10 +87,15 @@ const getConversation = async (req, res) => {
             message: "$messages.message",
             createdAt: "$messages.createdAt",
             updatedAt: "$messages.updatedAt",
-            receiver: {
+            recipient: {
               _id: "$receiverDetails._id",
               username: "$receiverDetails.username",
               email: "$receiverDetails.email",
+            },
+            sender: {
+              _id: "$senderDetails._id",
+              username: "$senderDetails.username",
+              email: "$senderDetails.email",
             },
           },
         },
