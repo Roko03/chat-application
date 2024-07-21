@@ -89,17 +89,17 @@ app.use(
   messageRouter
 );
 
-io.on("connection", (socket) => {
-  console.log("a user connected");
+// io.on("connection", (socket) => {
+//   console.log("a user connected");
 
-  socket.on("message", (data) => {
-    console.log(data);
-  });
+//   socket.on("message", (data) => {
+//     console.log(data);
+//   });
 
-  socket.on("disconnect", () => {
-    io.emit("message", "A user has left the chat");
-  });
-});
+//   socket.on("disconnect", () => {
+//     io.emit("message", "A user has left the chat");
+//   });
+// });
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);

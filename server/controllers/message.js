@@ -4,6 +4,7 @@ const Message = require("../models/Message");
 const User = require("../models/User");
 const { UnauthenticatedError } = require("../errors");
 const { StatusCodes } = require("http-status-codes");
+const mongoose = require("mongoose");
 
 const createMessage = async (req, res) => {
   const {
@@ -20,7 +21,12 @@ const createMessage = async (req, res) => {
   }
 
   let conversation = await Conversation.findOne({
-    participants: [userId, targetId],
+    participants: {
+      $all: [
+        new mongoose.Types.ObjectId(userId),
+        new mongoose.Types.ObjectId(targetId),
+      ],
+    },
   });
 
   if (!conversation) {

@@ -36,8 +36,24 @@ const getConversation = async (req, res) => {
       },
     },
     {
+      $unwind: {
+        path: "$messages",
+      },
+    },
+    {
+      $lookup: {
+        from: "user",
+        localField: "messages.receiver_id",
+        foreignField: "_id",
+        as: "messages.recivier",
+      },
+    },
+    {
       $project: {
         conservationMessage: 0,
+        "messages.recivier.createdAt": 0,
+        "messages.recivier.updatedAt": 0,
+        "messages.recivier.password": 0,
       },
     },
   ]).exec();
