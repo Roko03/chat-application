@@ -23,7 +23,7 @@ const HomePageSection = () => {
   };
 
   const fetchChat = async () => {
-    if (!targetUser || !isChatOpen) {
+    if (!targetUser) {
       setConversation(null);
       return;
     }
@@ -45,7 +45,7 @@ const HomePageSection = () => {
 
   useEffect(() => {
     fetchChat();
-  }, [isChatOpen, targetUser]);
+  }, [isChatOpen]);
 
   useEffect(() => {
     fetchUser();
