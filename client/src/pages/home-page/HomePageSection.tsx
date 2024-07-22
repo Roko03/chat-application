@@ -17,6 +17,7 @@ const HomePageSection = () => {
     const response = await getAllUsers();
 
     if (!response.success) {
+      setUserList(null);
       return;
     }
     setUserList(response.user);
@@ -47,9 +48,9 @@ const HomePageSection = () => {
   //   fetchChat();
   // }, [isChatOpen]);
 
-  // useEffect(() => {
-  //   fetchUser();
-  // }, []);
+  useEffect(() => {
+    fetchUser();
+  }, []);
 
   return (
     <section className={styles.home_section}>
