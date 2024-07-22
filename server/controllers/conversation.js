@@ -111,4 +111,17 @@ const getConversation = async (req, res) => {
   res.status(StatusCodes.OK).json({ conversation });
 };
 
-module.exports = { getConversation };
+const makeConversation = async (req, res) => {
+  const {
+    session: { userId: userId },
+    params: { id: targetId },
+  } = req;
+
+  const conversation = await Conversation.create({
+    participants: [userId, targetId],
+  });
+
+  res.status(StatusCodes.CREATED).json(conversation);
+};
+
+module.exports = { getConversation, makeConversation };
