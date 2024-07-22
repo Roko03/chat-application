@@ -32,6 +32,8 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
     setMessage("");
   };
 
+  console.log(messages);
+
   return (
     <div className={styles.chat}>
       {!isAuth || !user ? (
@@ -39,7 +41,8 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
       ) : (
         <>
           <div className={styles.chat__message}>
-            {Object.keys(messages[0].recipient).length !== 0 &&
+            {messages !== undefined &&
+              Object.keys(messages[0].recipient).length !== 0 &&
               messages.map((message) => {
                 const isSender = user._id === message.sender_id;
                 const variant = isSender ? "sender" : "recipient";
