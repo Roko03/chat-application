@@ -40,7 +40,7 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
         <>
           <div className={styles.chat__message}>
             {messages !== undefined &&
-              Object.keys(messages[0].recipient).length !== 0 &&
+              messages.length > 0 &&
               messages.map((message) => {
                 const isSender = user._id === message.sender_id;
                 const variant = isSender ? "sender" : "recipient";

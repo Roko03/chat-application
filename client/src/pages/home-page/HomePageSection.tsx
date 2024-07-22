@@ -40,7 +40,13 @@ const HomePageSection = () => {
       return;
     }
 
-    setConversation(response.conversation[0]);
+    if (
+      Object.keys(response.conversation[0].messages[0].recipient).length === 0
+    ) {
+      setConversation({ ...response.conversation[0], messages: [] });
+    } else {
+      setConversation(response.conversation[0]);
+    }
   };
 
   const openChat = (id: string) => {
@@ -97,10 +103,13 @@ const HomePageSection = () => {
           return { ...prev, messages };
         });
 
-        return () => socket.off("newMessage");
+        return () => {
+          socket.off("newMessage");
+          socket.close();
+        };
       });
     }
-  }, [conversation, setConversation]);
+  }, [socket, conversation, setConversation]);
 
   return (
     <section className={styles.home_section}>
