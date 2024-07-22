@@ -32,8 +32,6 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
     setMessage("");
   };
 
-  console.log(messages);
-
   return (
     <div className={styles.chat}>
       {!isAuth || !user ? (
