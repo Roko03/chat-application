@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import getUser from "../lib/authentication/getUser";
 import refreshSession from "../lib/authentication/refreshSession";
 import SnackBarComponent from "../components/snack-bar/SnackBarComponent";
@@ -11,18 +11,25 @@ type SnackBarType = {
 
 const AuthContext = createContext<{
   isAuth: boolean;
-  user: User | null;
+  user: UserDB | null;
   setIsAuth: React.Dispatch<React.SetStateAction<boolean>>;
-  setUser: React.Dispatch<React.SetStateAction<User | null>>;
+  setUser: React.Dispatch<React.SetStateAction<UserDB | null>>;
   openSnackBarComponent: (type: "error" | "success", message: string) => void;
   updateSession: () => void;
-} | null>(null);
+}>({
+  isAuth: false,
+  user: null,
+  setIsAuth: () => {},
+  setUser: () => {},
+  openSnackBarComponent: () => {},
+  updateSession: () => {},
+});
 
 export const useAuth = () => {
   const auth = useContext(AuthContext);
 
   if (auth === undefined) {
-    throw new Error("useAuth must be use with an provider");
+    throw new Error("useAuth must be use with a provider");
   }
 
   return auth;
@@ -33,7 +40,7 @@ export const AuthManagerProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<UserDB | null>(null);
   const [isAuth, setIsAuth] = useState<boolean>(!user);
   const [snackBar, setSnackBar] = useState<SnackBarType>({
     isOpen: false,
@@ -88,20 +95,25 @@ export const AuthManagerProvider = ({
   };
 
   useEffect(() => {
-    fetchUser();
-  }, []);
+    if (isAuth) {
+      fetchUser();
+    }
+  }, [isAuth]);
+
+  const contextValue = useMemo(
+    () => ({
+      isAuth,
+      user,
+      setIsAuth,
+      setUser,
+      openSnackBarComponent,
+      updateSession,
+    }),
+    [isAuth, user]
+  );
 
   return (
-    <AuthContext.Provider
-      value={{
-        isAuth,
-        user,
-        setIsAuth,
-        setUser,
-        openSnackBarComponent,
-        updateSession,
-      }}
-    >
+    <AuthContext.Provider value={contextValue}>
       {children}
       <SnackBarComponent
         type={snackBar.type}

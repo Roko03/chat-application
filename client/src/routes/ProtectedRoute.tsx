@@ -3,16 +3,14 @@ import { useAuth } from "../util/useAuthContext";
 import { Outlet, useNavigate } from "react-router-dom";
 
 const ProtectedRoute = () => {
-  const auth = useAuth();
+  const { isAuth } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (auth) {
-      if (auth.isAuth === false) {
-        navigate("/authentication", { replace: true });
-      }
+    if (isAuth === false) {
+      navigate("/authentication", { replace: true });
     }
-  }, [navigate, auth]);
+  }, [navigate, isAuth]);
 
   return <Outlet />;
 };

@@ -2,11 +2,14 @@ import "./app.scss";
 import { RouterProvider } from "react-router-dom";
 import router from "./Routes";
 import { AuthManagerProvider } from "./util/useAuthContext";
+import { SocketManagerProvider } from "./util/useSocketContext";
 
 function App() {
   return (
     <AuthManagerProvider>
-      <RouterProvider router={router} />
+      <SocketManagerProvider>
+        <RouterProvider router={router} />
+      </SocketManagerProvider>
     </AuthManagerProvider>
   );
 }

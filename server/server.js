@@ -7,9 +7,7 @@ const helmet = require("helmet");
 const xss = require("xss-clean");
 const rateLimiter = require("express-rate-limit");
 const cors = require("cors");
-
 const express = require("express");
-const app = express();
 const connectDB = require("./utils/connectDB");
 const MongoStore = require("connect-mongo");
 
@@ -23,6 +21,10 @@ const authMiddleware = require("./middleware/authentication");
 
 const authRouter = require("./router/auth");
 const userRouter = require("./router/user");
+const conversationRouter = require("./router/conversation");
+const messageRouter = require("./router/message");
+
+const { app, server_app } = require("./utils/socket");
 
 //middleware
 app.set("trust proxy", 1);
@@ -34,7 +36,7 @@ app.use(
 );
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: ["http://localhost:5173", "http://localhost:4173"],
     methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD"],
     credentials: true,
   })
@@ -69,6 +71,12 @@ app.use(
 
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/user", authMiddleware, userRouter);
+app.use(
+  "/api/v1/conversation",
+  authMiddleware,
+  conversationRouter,
+  messageRouter
+);
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
@@ -78,7 +86,7 @@ const port = process.env.PORT || 3000;
 const server = async () => {
   try {
     await connectDB();
-    app.listen(port, console.log("Server is running..."));
+    server_app.listen(port, console.log("Server is running..."));
   } catch (error) {
     console.log(error);
   }

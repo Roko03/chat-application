@@ -3,11 +3,13 @@ import styles from "./UserListItemComponent.module.scss";
 interface UserListItemComponentProps {
   type: "primary" | "secondary";
   user: UserDB;
+  openChat: (id: string) => void;
 }
 
 const UserListItemComponent: React.FC<UserListItemComponentProps> = ({
   user,
   type,
+  openChat,
 }) => {
   const listItemVariant = (type: "primary" | "secondary"): string => {
     const listItemStyle: { [key in "primary" | "secondary"]: string } = {
@@ -19,7 +21,10 @@ const UserListItemComponent: React.FC<UserListItemComponentProps> = ({
   };
 
   return (
-    <div className={`${styles.user_list_item} ${listItemVariant(type)}`}>
+    <div
+      className={`${styles.user_list_item} ${listItemVariant(type)}`}
+      onClick={() => openChat(user._id)}
+    >
       {user.username}
     </div>
   );
