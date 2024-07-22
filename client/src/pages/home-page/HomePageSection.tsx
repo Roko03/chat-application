@@ -44,9 +44,11 @@ const HomePageSection = () => {
     setTargetUser(null);
   };
 
-  // useEffect(() => {
-  //   fetchChat();
-  // }, [isChatOpen]);
+  useEffect(() => {
+    if (isChatOpen) {
+      fetchChat();
+    }
+  }, [isChatOpen]);
 
   useEffect(() => {
     fetchUser();
