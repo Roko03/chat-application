@@ -29,7 +29,6 @@ const ChatMessageComponent: React.FC<ChatMessageComponentProps> = ({
 
   return (
     <div className={`${styles.chat_message} ${messageVariant(variant)}`}>
-      <div className={styles.chat_message__user}>{user.username}:</div>
       <div className={styles.chat_message__message}>
         <p>{message}</p>
       </div>

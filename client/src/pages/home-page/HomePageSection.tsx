@@ -6,12 +6,15 @@ import HomePageChatComponent from "./components/home-page-chat/HomePageChatCompo
 import ChatComponent from "../../components/chat/ChatComponent";
 import getAllUsers from "../../lib/user/getAllUsers";
 import getConversetion from "../../lib/conversation/getConversation";
+import { useSocket } from "../../util/useSocketContext";
+import makeConversetion from "../../lib/conversation/makeConversation";
 
 const HomePageSection = () => {
   const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
   const [userList, setUserList] = useState<UserDB[] | null>(null);
   const [targetUser, setTargetUser] = useState<string | null>(null);
   const [conversation, setConversation] = useState<Conversation | null>(null);
+  const { socket } = useSocket();
 
   const fetchUser = async () => {
     const response = await getAllUsers();
@@ -31,6 +34,12 @@ const HomePageSection = () => {
 
     const response = await getConversetion(targetUser);
 
+    if (response.conversation.length === 0) {
+      const c_data = await makeConversetion(targetUser);
+      setConversation(c_data);
+      return;
+    }
+
     setConversation(response.conversation[0]);
   };
 
@@ -42,7 +51,29 @@ const HomePageSection = () => {
   const closeChat = () => {
     setIsChatOpen(false);
     setTargetUser(null);
+    setConversation(null);
   };
+
+  const updateMessage = (data: Message) => {
+    setConversation((prev) => {
+      if (!prev) {
+        return {
+          _id: "",
+          participants: [],
+          messages: [data],
+        };
+      }
+
+      return {
+        ...prev,
+        messages: [...prev.messages, data],
+      };
+    });
+  };
+
+  useEffect(() => {
+    fetchUser();
+  }, []);
 
   useEffect(() => {
     if (isChatOpen) {
@@ -51,8 +82,25 @@ const HomePageSection = () => {
   }, [isChatOpen]);
 
   useEffect(() => {
-    fetchUser();
-  }, []);
+    if (conversation) {
+      socket?.on("newMessage", (message) => {
+        let messages = [...conversation.messages, message];
+        setConversation((prev) => {
+          if (!prev) {
+            return {
+              _id: "",
+              participants: [],
+              messages: [message],
+            };
+          }
+
+          return { ...prev, messages };
+        });
+
+        return () => socket.off("newMessage");
+      });
+    }
+  }, [conversation, setConversation]);
 
   return (
     <section className={styles.home_section}>
@@ -66,6 +114,7 @@ const HomePageSection = () => {
             <ChatComponent
               messages={conversation.messages}
               targetUser={targetUser}
+              updateMessage={updateMessage}
             />
           </HomePageChatComponent>
         )}

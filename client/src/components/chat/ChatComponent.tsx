@@ -9,21 +9,25 @@ import CircularProgressComponent from "../circular-progress/CircularProgressComp
 interface ChatComponentProps {
   messages: Message[];
   targetUser: string | null;
+  updateMessage: (data: Message) => void;
 }
 
 const ChatComponent: React.FC<ChatComponentProps> = ({
   messages,
   targetUser,
+  updateMessage,
 }) => {
   const { isAuth, user } = useAuth();
   const [message, setMessage] = useState<string>("");
 
   const sendMessage = async (message: string) => {
-    if (targetUser === null) {
-      return;
-    }
+    if (!targetUser) return;
 
-    await makeMessage(targetUser, message);
+    if (!message) return;
+
+    const createdMessage = await makeMessage(targetUser, message);
+
+    updateMessage(createdMessage.message);
 
     setMessage("");
   };
@@ -35,20 +39,21 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
       ) : (
         <>
           <div className={styles.chat__message}>
-            {messages.map((message) => {
-              const isSender = user._id === message.sender_id;
-              const variant = isSender ? "sender" : "recipient";
+            {Object.keys(messages[0].recipient).length !== 0 &&
+              messages.map((message) => {
+                const isSender = user._id === message.sender_id;
+                const variant = isSender ? "sender" : "recipient";
 
-              return (
-                <ChatMessageComponent
-                  key={message._id}
-                  user={message.sender}
-                  variant={variant}
-                  message={message.message}
-                  date={message.createdAt}
-                />
-              );
-            })}
+                return (
+                  <ChatMessageComponent
+                    key={message._id}
+                    user={message.sender}
+                    variant={variant}
+                    message={message.message}
+                    date={message.createdAt}
+                  />
+                );
+              })}
           </div>
           <div className={styles.chat__input}>
             <textarea
