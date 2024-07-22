@@ -7,22 +7,9 @@ const helmet = require("helmet");
 const xss = require("xss-clean");
 const rateLimiter = require("express-rate-limit");
 const cors = require("cors");
-
-const { createServer } = require("node:http");
-const { Server } = require("socket.io");
-
 const express = require("express");
-const app = express();
 const connectDB = require("./utils/connectDB");
 const MongoStore = require("connect-mongo");
-const server_app = createServer(app);
-const io = new Server(server_app, {
-  cors: {
-    origin: "http://localhost:5173",
-    methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD"],
-    credentials: true,
-  },
-});
 
 const session = require("express-session");
 const bodyParser = require("body-parser");
@@ -36,6 +23,8 @@ const authRouter = require("./router/auth");
 const userRouter = require("./router/user");
 const conversationRouter = require("./router/conversation");
 const messageRouter = require("./router/message");
+
+const { app, server_app } = require("./utils/socket");
 
 //middleware
 app.set("trust proxy", 1);
@@ -88,18 +77,6 @@ app.use(
   conversationRouter,
   messageRouter
 );
-
-// io.on("connection", (socket) => {
-//   console.log("a user connected");
-
-//   socket.on("message", (data) => {
-//     console.log(data);
-//   });
-
-//   socket.on("disconnect", () => {
-//     io.emit("message", "A user has left the chat");
-//   });
-// });
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
