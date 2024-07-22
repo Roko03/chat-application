@@ -1,11 +1,9 @@
 import { ChangeEvent, useState } from "react";
 import ButtonComponent from "../button/ButtonComponent";
 import styles from "./ChatComponent.module.scss";
-import { io } from "socket.io-client";
 import ChatMessageComponent from "./chat-message/ChatMessageComponent";
 import { useAuth } from "../../util/useAuthContext";
 import makeMessage from "../../lib/conversation/makeMessage";
-const socket = io("http://localhost:3000");
 
 interface ChatComponentProps {
   messages: Message[];
@@ -23,7 +21,6 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
     if (targetUser === null) {
       return;
     }
-    //socket.emit("message", { message });
 
     await makeMessage(targetUser, message);
 
