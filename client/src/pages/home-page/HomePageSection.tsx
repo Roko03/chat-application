@@ -43,13 +43,13 @@ const HomePageSection = () => {
     setTargetUser(null);
   };
 
-  useEffect(() => {
-    fetchChat();
-  }, [isChatOpen]);
+  // useEffect(() => {
+  //   fetchChat();
+  // }, [isChatOpen]);
 
-  useEffect(() => {
-    fetchUser();
-  }, []);
+  // useEffect(() => {
+  //   fetchUser();
+  // }, []);
 
   return (
     <section className={styles.home_section}>
