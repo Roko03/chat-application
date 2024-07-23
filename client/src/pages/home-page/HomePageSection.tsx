@@ -96,8 +96,6 @@ const HomePageSection = () => {
     }
   }, [socket, conversation]);
 
-  //console.log(conversation);
-
   return (
     <section className={styles.home_section}>
       <div className={styles.home_section__container}>
