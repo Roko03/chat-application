@@ -37,6 +37,7 @@ const HomePageSection = () => {
     if (response.conversation.length === 0) {
       const c_data = await makeConversetion(targetUser);
       setConversation(c_data);
+      setConversationId(c_data._id);
       return;
     }
 
@@ -83,7 +84,7 @@ const HomePageSection = () => {
             };
           }
 
-          return { ...prev, messages: [...prev.messages, message] };
+          return { ...prev, messages: [...(prev.messages || []), message] };
         });
       };
 
