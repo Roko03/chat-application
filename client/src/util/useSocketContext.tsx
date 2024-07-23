@@ -34,7 +34,6 @@ export const SocketManagerProvider = ({
     if (isAuth && user && conversationId) {
       const socket = io("http://localhost:3000/", {
         query: {
-          userId: user._id,
           conversationId: conversationId,
         },
       });
