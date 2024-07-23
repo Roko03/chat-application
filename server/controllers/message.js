@@ -5,7 +5,7 @@ const User = require("../models/User");
 const { UnauthenticatedError } = require("../errors");
 const { StatusCodes } = require("http-status-codes");
 const mongoose = require("mongoose");
-const { io, getSocketId } = require("../utils/socket");
+const { io, getSocketConversationId } = require("../utils/socket");
 
 const createMessage = async (req, res) => {
   const {
@@ -47,7 +47,7 @@ const createMessage = async (req, res) => {
     message_id: message._id,
   });
 
-  io.to(getSocketId(targetId)).emit("newMessage", message);
+  io.to(getSocketConversationId(conversation._id)).emit("newMessage", message);
 
   res
     .status(StatusCodes.OK)

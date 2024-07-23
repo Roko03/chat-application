@@ -12,18 +12,33 @@ const io = new Server(server_app, {
   },
 });
 const socketUsers = {};
+const socketConversation = {};
 
-const getSocketId = (id) => {
-  return socketUsers[id];
+const getSocketConversationId = (id) => {
+  return socketConversation[id];
 };
 
 io.on("connection", (socket) => {
   const userId = socket.handshake.query.userId;
+  const conversationId = socket.handshake.query.conversationId;
   if (userId != undefined) socketUsers[userId] = socket.id;
+  if (conversationId != undefined) {
+    socketConversation[conversationId] =
+      socketConversation[conversationId] || [];
+    socketConversation[conversationId].push(socket.id);
+    socket.join(conversationId);
+  }
 
   socket.on("disconnect", () => {
-    io.emit("message", "A user has left the chat");
+    delete socketUsers[userId];
+    if (conversationId != undefined) {
+      socketConversation[conversationId] = socketConversation[
+        conversationId
+      ].filter((id) => id !== socket.id);
+      if (socketConversation[conversationId].length === 0)
+        delete socketConversation[conversationId];
+    }
   });
 });
 
-module.exports = { app, io, server_app, getSocketId };
+module.exports = { app, io, server_app, getSocketConversationId };
