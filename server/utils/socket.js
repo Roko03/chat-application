@@ -27,8 +27,6 @@ io.on("connection", (socket) => {
     socket.join(conversationId);
   }
 
-  console.log(socketConversation);
-
   socket.on("disconnect", () => {
     if (conversationId != undefined) {
       socketConversation[conversationId] = socketConversation[
