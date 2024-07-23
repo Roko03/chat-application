@@ -1,6 +1,7 @@
 const Conversation = require("../models/Conversation");
 const mongoose = require("mongoose");
 const { StatusCodes } = require("http-status-codes");
+const { BadRequestError } = require("../errors");
 
 const getConversation = async (req, res) => {
   const {
@@ -8,7 +9,7 @@ const getConversation = async (req, res) => {
     params: { id: targetId },
   } = req;
 
-  const conversation = await Conversation.aggregate([
+  let conversation = await Conversation.aggregate([
     {
       $match: {
         participants: {
@@ -117,8 +118,22 @@ const makeConversation = async (req, res) => {
     params: { id: targetId },
   } = req;
 
+  const conversationExist = await Conversation.findOne({
+    participants: {
+      $all: [
+        new mongoose.Types.ObjectId(userId),
+        new mongoose.Types.ObjectId(targetId),
+      ],
+    },
+  });
+
+  if (conversationExist) throw new BadRequestError("Razgovor već postoji");
+
   const conversation = await Conversation.create({
-    participants: [userId, targetId],
+    participants: [
+      new mongoose.Types.ObjectId(userId),
+      new mongoose.Types.ObjectId(targetId),
+    ],
   });
 
   res.status(StatusCodes.CREATED).json(conversation);

@@ -32,7 +32,10 @@ const createMessage = async (req, res) => {
 
   if (!conversation) {
     conversation = await Conversation.create({
-      participants: [userId, targetId],
+      participants: [
+        new mongoose.Types.ObjectId(userId),
+        new mongoose.Types.ObjectId(targetId),
+      ],
     });
   }
 
