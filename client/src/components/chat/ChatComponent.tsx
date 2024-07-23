@@ -9,13 +9,11 @@ import CircularProgressComponent from "../circular-progress/CircularProgressComp
 interface ChatComponentProps {
   messages: Message[];
   targetUser: string | null;
-  updateMessage: (data: Message) => void;
 }
 
 const ChatComponent: React.FC<ChatComponentProps> = ({
   messages,
   targetUser,
-  updateMessage,
 }) => {
   const { isAuth, user } = useAuth();
   const [message, setMessage] = useState<string>("");
@@ -25,9 +23,7 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
 
     if (!message) return;
 
-    const createdMessage = await makeMessage(targetUser, message);
-
-    updateMessage(createdMessage.message);
+    await makeMessage(targetUser, message);
 
     setMessage("");
   };

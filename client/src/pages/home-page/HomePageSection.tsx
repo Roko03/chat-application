@@ -14,7 +14,7 @@ const HomePageSection = () => {
   const [userList, setUserList] = useState<UserDB[] | null>(null);
   const [targetUser, setTargetUser] = useState<string | null>(null);
   const [conversation, setConversation] = useState<Conversation | null>(null);
-  const { socket } = useSocket();
+  const { socket, setConversationId } = useSocket();
 
   const fetchUser = async () => {
     const response = await getAllUsers();
@@ -47,6 +47,7 @@ const HomePageSection = () => {
     } else {
       setConversation(response.conversation[0]);
     }
+    setConversationId(response.conversation[0]._id);
   };
 
   const openChat = (id: string) => {
@@ -60,23 +61,6 @@ const HomePageSection = () => {
     setConversation(null);
   };
 
-  const updateMessage = (data: Message) => {
-    setConversation((prev) => {
-      if (!prev) {
-        return {
-          _id: "",
-          participants: [],
-          messages: [data],
-        };
-      }
-
-      return {
-        ...prev,
-        messages: [...prev.messages, data],
-      };
-    });
-  };
-
   useEffect(() => {
     fetchUser();
   }, []);
@@ -88,9 +72,8 @@ const HomePageSection = () => {
   }, [isChatOpen]);
 
   useEffect(() => {
-    if (conversation) {
-      socket?.on("newMessage", (message) => {
-        let messages = [...conversation.messages, message];
+    if (conversation && socket) {
+      const handleMessage = (message: Message) => {
         setConversation((prev) => {
           if (!prev) {
             return {
@@ -100,16 +83,19 @@ const HomePageSection = () => {
             };
           }
 
-          return { ...prev, messages };
+          return { ...prev, messages: [...prev.messages, message] };
         });
+      };
 
-        return () => {
-          socket.off("newMessage");
-          socket.close();
-        };
-      });
+      socket.on("newMessage", handleMessage);
+
+      return () => {
+        socket.off("newMessage", handleMessage);
+      };
     }
-  }, [socket, conversation, setConversation]);
+  }, [socket, conversation]);
+
+  //console.log(conversation);
 
   return (
     <section className={styles.home_section}>
@@ -123,7 +109,6 @@ const HomePageSection = () => {
             <ChatComponent
               messages={conversation.messages}
               targetUser={targetUser}
-              updateMessage={updateMessage}
             />
           </HomePageChatComponent>
         )}

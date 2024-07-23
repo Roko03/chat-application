@@ -4,8 +4,10 @@ import { useAuth } from "./useAuthContext";
 
 const SocketContext = createContext<{
   socket: Socket | null;
+  setConversationId: (data: string | null) => void;
 }>({
   socket: null,
+  setConversationId: () => null,
 });
 
 export const useSocket = () => {
@@ -24,20 +26,21 @@ export const SocketManagerProvider = ({
   children: React.ReactNode;
 }) => {
   const [socket, setSocket] = useState<Socket | null>(null);
+  const [conversationId, setConversationId] = useState<string | null>(null);
 
   const { isAuth, user } = useAuth();
 
   useEffect(() => {
-    if (isAuth && user) {
+    if (isAuth && user && conversationId) {
       const socket = io("http://localhost:3000/", {
         query: {
           userId: user._id,
+          conversationId: conversationId,
         },
       });
       setSocket(socket);
       return () => {
         socket.close();
-        setSocket(null);
       };
     } else {
       if (socket) {
@@ -45,10 +48,10 @@ export const SocketManagerProvider = ({
         setSocket(null);
       }
     }
-  }, [isAuth, user]);
+  }, [isAuth, user, conversationId]);
 
   return (
-    <SocketContext.Provider value={{ socket }}>
+    <SocketContext.Provider value={{ socket, setConversationId }}>
       {children}
     </SocketContext.Provider>
   );
