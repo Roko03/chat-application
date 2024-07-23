@@ -11,7 +11,7 @@ const io = new Server(server_app, {
     credentials: true,
   },
 });
-const socketUsers = {};
+
 const socketConversation = {};
 
 const getSocketConversationId = (id) => {
@@ -19,9 +19,7 @@ const getSocketConversationId = (id) => {
 };
 
 io.on("connection", (socket) => {
-  const userId = socket.handshake.query.userId;
   const conversationId = socket.handshake.query.conversationId;
-  if (userId != undefined) socketUsers[userId] = socket.id;
   if (conversationId != undefined) {
     socketConversation[conversationId] =
       socketConversation[conversationId] || [];
@@ -30,7 +28,6 @@ io.on("connection", (socket) => {
   }
 
   socket.on("disconnect", () => {
-    delete socketUsers[userId];
     if (conversationId != undefined) {
       socketConversation[conversationId] = socketConversation[
         conversationId
