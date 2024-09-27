@@ -1,6 +1,6 @@
 # MERN Chat application
 
-![](./public/node-code-school.gif)
+![](./client/public/chat-app.gif)
 
 [Video of how it works](https://drive.google.com/file/d/135UqEBBaYEAnEh8SF_b88KZvAVrzsUah/view?usp=sharing)
 
