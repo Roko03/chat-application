@@ -2,6 +2,8 @@
 
 ![](./public/node-code-school.gif)
 
+[Video of how it works](https://drive.google.com/file/d/135UqEBBaYEAnEh8SF_b88KZvAVrzsUah/view?usp=sharing)
+
 Basic MERN (Mongo + Express + React + Node.JS) application.
 
 Includes:
