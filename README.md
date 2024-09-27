@@ -90,7 +90,72 @@ I defined typography for the project using two Google Fonts: Poppins and Roboto.
 
 ## Challenges and Solutions
 
-The most challenging part of the project was implementing [Socket.io]() in application.
+The most challenging part of the project was implementing [Socket.io](https://socket.io/docs/v4/) in application. Firstly, I implement socket in backend and enable CORS.
+```javascript
+const http = require("http");
+const server_app = http.createServer(app);
+const { Server } = require("socket.io");
+
+const io = new Server(server_app, {
+  cors: {
+    origin: ["http://localhost:5173", "http://localhost:4173"],
+    methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD"],
+    credentials: true,
+  },
+});
+```
+After, we set when is socket connected to check which conversationId is in socket and store it in object called `socketConversation` and join in room with that conversationId.
+
+```javascript
+io.on("connection", (socket) => {
+  const conversationId = socket.handshake.query.conversationId;
+  if (conversationId != undefined) {
+    socketConversation[conversationId] =
+      socketConversation[conversationId] || [];
+    socketConversation[conversationId].push(socket.id);
+    socket.join(conversationId);
+  }
+});
+```
+In frontend, we create socket context where we have functionality for socket. 
+We define socket and conversationId in state
+```javascript
+const [socket, setSocket] = useState<Socket | null>(null);
+const [conversationId, setConversationId] = useState<string | null>(null);
+```
+We set conversation in socket query where we via backend joined to that room
+```javascript
+useEffect(() => {
+    if (isAuth && user && conversationId) {
+      const socket = io("http://localhost:3000/", {
+        query: {
+          conversationId: conversationId,
+        },
+      });
+      setSocket(socket);
+      return () => {
+        socket.close();
+      };
+    } else {
+      if (socket) {
+        socket.close();
+        setSocket(null);
+      }
+    }
+}, [isAuth, user, conversationId]);
+```
+Also, when we want to leave that conversation, we need to disconnect from that room
+```javascript
+socket.on("disconnect", () => {
+    if (conversationId != undefined) {
+      socketConversation[conversationId] = socketConversation[
+        conversationId
+      ].filter((id) => id !== socket.id);
+      if (socketConversation[conversationId].length === 0)
+        delete socketConversation[conversationId];
+    }
+});
+```
 
 # Project Structure
 - **Folders and Files:** The project follows modular structure for folder with the model-view-controller pattern
